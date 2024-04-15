@@ -1,0 +1,118 @@
+%% responsehelper.sty
+%% Copyright 2024-present Naheel Faisal <naheelazawy@gmail.com>
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+%
+% The Current Maintainer of this work is Naheel Faisal.
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{responsehelper}[2024/04/15 Response helper by Naheel Faisal]
+
+\newcommand{\showresponse}{1}
+\DeclareOption{clean}{\renewcommand{\showresponse}{0}}
+\DeclareOption*{\PackageWarning{examplepackage}{Unknown ‘\CurrentOption’}}
+\ProcessOptions\relax
+
+\RequirePackage{xcolor}
+\RequirePackage{enumitem}
+\RequirePackage{calc}
+\RequirePackage{forarray}
+
+\RequirePackage{bibentry}
+\nobibliography*
+
+\if\showresponse1
+%% copy and paste text changes
+\usepackage{clipboard}
+\newcommand{\revcolor}[1]{{\color{blue}#1}}
+\newcommand{\rev}[2]{\label{rev-#1}\llabel{rev-line-#1}\Copy{#1}{\revcolor{#2}}}
+\newcommand{\revpaste}[1]{\Paste{#1}}
+
+%% response text
+\newcommand{\revresponseto}[1]{\noindent\underline{\textbf{Response to #1:}} \\}
+\newcommand{\revcomment}[2]{\noindent{\textbf{COMMENT #1:} #2} \\}
+\newcommand{\revresponse}[2]{\noindent{\color{teal} \textbf{RESPONSE #1:} #2} \\}
+\newcommand{\revcommentn}[1]{\noindent{\textbf{COMMENT:} #1} \\}
+\newcommand{\revresponsen}[1]{\noindent{\color{teal} \textbf{RESPONSE:} #1} \\}
+
+%% utils
+\newcommand{\revdots}{\revcolor{\noindent\ldots{}}\\}
+\newcommand{\TODO}[1]{\colorbox{yellow}{TODO #1}}
+\newcommand{\semicite}[1]{\revcolor{\noindent\cite{#1} \bibentry{#1}.}\\}
+\newcommand{\minicite}[1]{
+  \revcolor{
+  \noindent\textbf{References:}
+  \begin{description}[leftmargin=!,labelwidth=\widthof{\bfseries [100] }]
+    \ForEach{,}{
+    \item [\cite{\thislevelitem}] \bibentry{\thislevelitem}}
+    {#1}
+  \end{description}
+  }
+}
+
+%% line numbers
+\usepackage[switch]{lineno}
+\linenumbers % enable line numbering
+%% \let\makeLineNumber\relax % invisible line numbers
+\newcommand{\llabel}[1]{\hypertarget{llineno:#1}{\linelabel{#1}}}
+\newcommand{\lref}[1]{\hyperlink{llineno:#1}{\ref*{#1}}}
+
+%% review location
+\makeatletter
+\AtBeginDocument{%
+\let\oldlabel\label
+\newcommand*\collabel[1]{%
+  \begingroup
+    \protected@write\@auxout{}{%
+      \string\newlabel{col:#1}{%
+        {\if@firstcolumn left\else right\fi}%
+        {}%
+        {}%
+        {}%
+        {}%
+      }%
+    }%
+  \endgroup
+}
+\renewcommand*\label[1]{%
+  \collabel{#1}\oldlabel{#1}
+}
+\def\columnref#1{%
+  \HyRef@StarSetRef{#1}\@firstoffive
+}
+}
+\makeatother
+\newcommand{\revpage}[1]{page~\pageref{rev-#1}}
+\newcommand{\revcol}[1]{\columnref{col:rev-#1} column}
+\newcommand{\revline}[1]{line \lref{rev-line-#1}}
+\newcommand{\revloc}[1]{\revpage{#1}, \revcol{#1}, \revline{#1}}
+
+\newcommand{\mkresponse}[2]{
+  \clearpage
+  \onecolumn
+  \nolinenumbers
+  \setcounter{page}{1}
+  \markboth{}{}
+  \renewcommand{\label}[1]{}
+
+  {
+    \setlength{\parindent}{0cm}
+    #1
+  }
+  \newpage
+  #2
+}
+
+\else
+\newcommand{\revcolor}[1]{#1}
+\newcommand{\rev}[2]{#2}
+\newcommand{\mkresponse}[2]{}
+\fi

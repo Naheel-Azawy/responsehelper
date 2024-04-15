@@ -1,0 +1,19 @@
+* Response helper for LaTeX papers
+Help creating response file and mark changes on the paper when changes are required to be done.
+
+** Usage
+- Copy ~responsehelper.sty~ to your project directory
+- ~\usepackage{responsehelper}~
+- Or later ~\usepackage[clean]{responsehelper}~ to get the cleaned paper to be published
+- In the text, use ~\rev{label}{text}~ to highlight changes
+- At the end of the paper, call ~\mkresponse{cover}{response text}~
+- In the response text, use:
+  + ~\revcomment{n}~ to start a reviewer's comment number n
+  + ~\revresponse{n}~ to write your response
+  + ~\revloc{label}~ to locate the changes in the text
+  + ~\revpaste{label}~ to paste the revised text from the main manuscript
+  + ~\minicite{mybib1,mybib2}~ to have a mini references list
+- Check the [[./example/]] directory for an example usage and [[./example/out/]] to see the compiled PDFs.
+
+** License
+LPPL

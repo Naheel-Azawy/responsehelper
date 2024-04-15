@@ -1,0 +1,186 @@
+\documentclass[journal]{IEEEtran}
+\usepackage{amsmath,amsfonts}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{array}
+\usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+\usepackage{textcomp}
+\usepackage{stfloats}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage{hyperref}
+\usepackage{lipsum}
+
+% \usepackage[clean]{responsehelper} %% use this to get a clean version
+\usepackage{responsehelper}
+
+\def\thetitle{My Very Important Paper}
+\def\theauthor{Me}
+
+\markboth{THE MOST PRESTIGIOUS JOURNAL EVER, VOL. 99, NO. 99, 2099}
+{\theauthor \MakeLowercase{\textit{et al.}}: \thetitle}
+
+\hypersetup{
+  pdfauthor={\theauthor},
+  pdftitle={\thetitle},
+  colorlinks=true,
+  linkcolor=black,
+  anchorcolor=black,
+  citecolor=black,
+  filecolor=black,
+  menucolor=black,
+  runcolor=black,
+  urlcolor=black
+}
+
+\begin{document}
+
+\title{\thetitle}
+\author{\theauthor}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% TEXT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{abstract}
+  \lipsum[1]
+\end{abstract}
+
+\section{Introduction}
+The is some random text~\cite{samplebib}.
+\rev{stuff}{Where this part was added in the revised version of the paper~\cite{mybib1,mybib2}}.
+
+The rest of the text is not changed here \lipsum[1]
+
+But more \rev{morestuff}{changes can be found here too \lipsum[1]}
+
+\section{Other section}
+\lipsum[3]
+\lipsum[4]
+
+\section{Yet another}
+\lipsum[5]
+
+\section{Conclusion}
+Enough talking.
+\rev{nice}{Overall, this research is the best.
+\lipsum[6]}
+
+\bibliographystyle{IEEEtran}
+\bibliography{./refs.bib}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% RESPONSE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\mkresponse{
+
+\today \\~\\
+Professor Important Master \\~\\
+Editor-in-Chief \\~\\
+The Most Prestigious Journal Ever \\~\\
+Ref.: Manuscript ID: 123456789 entitled ``\thetitle''
+
+\vspace{1cm}
+
+Dear Prof. Important Master,\\
+
+Thank you for your efforts and please accept my magnificent paper.
+\lipsum[1]
+The paper is now updated to be even more wonderful.
+
+\vspace{1cm}
+
+The responses to each of the queries are provided below in green color, and the manuscript's revised parts are provided in blue color.
+
+\vspace{1cm}
+
+With regards, \\
+Authors
+
+}{
+
+\revresponseto{Associate Editor}
+
+\revcommentn{
+  Make the paper nicer. \lipsum[1]
+}
+
+\revresponsen{
+  Ok, now it is nicer.
+  \lipsum[1]
+  To clarify this important point, changes can be found in \revloc{nice}.
+}
+
+\revpaste{nice}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\revresponseto{Reviewer 1}
+
+\revcomment{1}{
+  Why? \lipsum[1]
+}
+
+\revresponse{1}{
+  Because of reasons. \lipsum[1] To demonstrate that, changes can be found in the manuscript in \revloc{stuff}.
+}
+
+\revpaste{stuff}
+\bigbreak{}
+\minicite{mybib1,mybib2}
+\bigbreak{}
+
+%%%%%%%%%%%%%%
+
+\revcomment{2}{
+  What is going on? \lipsum[1]
+}
+
+\revresponse{2}{
+  To further clarify, we did this and that.
+  \lipsum[1]
+  The updated version delves into more details in \revloc{morestuff}.
+}
+
+\revpaste{morestuff}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\revresponseto{Reviewer 2}
+
+\revcommentn{
+  Very good paper you deserve a Nobel. \lipsum[1]
+}
+
+\revresponsen{
+  Thanks mate. \lipsum[1]
+}
+
+%%%%%%%%%%%%%%
+
+\revcomment{1}{
+  What is the purpose of life? \lipsum[1]
+}
+
+\revresponse{1}{
+  The purpose of life can be explained by understanding the novel approach in this paper.
+  \lipsum[1]
+  Additional clarification is added to this paper in \revloc{stuff} and \revloc{morestuff}.
+}
+
+\revpaste{stuff}
+\\\revdots{}
+\revpaste{morestuff}
+\bigbreak{}
+\minicite{mybib1,mybib2}
+
+} %% \mkresponse
+
+\end{document}
