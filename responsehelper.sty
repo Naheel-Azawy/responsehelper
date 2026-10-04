@@ -29,6 +29,7 @@
 \RequirePackage{enumitem}
 \RequirePackage{calc}
 \RequirePackage{forarray}
+\RequirePackage{ifthen}
 \RequirePackage{placeins}
 \RequirePackage{zref-user}
 \RequirePackage{zref-abspage} % absolute page number, used to find where the response starts
@@ -189,6 +190,7 @@
   \endgroup
 }
 \renewcommand*\label[1]{%
+  \global\@namedef{rh@seen@#1}{}% remember the label, used by \inplacefigure and \inplacetable
   \collabel{#1}\oldlabel{#1}
 }
 \def\columnref#1{%
@@ -211,6 +213,14 @@
 }
 \makeatother
 
+%% keeps the manuscript's table number format for \inplacetable (called by responseletter, its name has no @ because it is used where @ is not a letter)
+\makeatletter
+\newcommand{\responsehelpersavetable}{%
+  \let\rh@thetable\thetable
+  \renewcommand{\themytable}{\rh@thetable}%
+}
+\makeatother
+
 %% main response environment
 \newenvironment{responseletter}[1][]{
 \clearpage
@@ -220,8 +230,11 @@
 \fontsize{12}{13.5}\selectfont
 
 \newcounter{myfigure} % to be used for extra refs
-\setcounter{myfigure}{\thefigure}
+\setcounter{myfigure}{\value{figure}}
 \renewcommand{\themyfigure}{\arabic{myfigure}}
+\newcounter{mytable} % same for tables, keeps the manuscript's table number format
+\setcounter{mytable}{\value{table}}
+\responsehelpersavetable
 \setcounter{page}{1} % reset counters
 \setcounter{table}{0}
 \setcounter{figure}{0}
@@ -273,6 +286,23 @@
 % }
 
 \makeatletter
+% Numbering of inlined figures and tables, #1: counter (myfigure or mytable), #2: label.
+% - a label that the manuscript defines is only referenced, so it keeps the manuscript's number
+% - any other label is new: it takes the next number after the manuscript's last one
+% New labels are numbered in order of appearance on every run, so adding one later never collides.
+\newcommand{\rh@inplacenew}[2]{%
+  \begingroup
+    \let\c@table\c@mytable % lets the manuscript's \thetable format count mytable
+    \refstepcounter{#1}%
+    \revlabel{#2}%
+    \csname the#1\endcsname
+  \endgroup
+}
+\newcommand{\rh@inplaceref}[2]{%
+  \@ifundefined{rh@seen@#2}{\rh@inplacenew{#1}{#2}}{\ref{#2}}%
+}
+
+% helper for inlined figures: \inplacefigure{width}{file}{label}{caption}
 \newcommand{\inplacefigure}[4]{%
   \par\medskip
   \noindent
@@ -282,38 +312,30 @@
     \end{center}
     \revcolor
     {\small{}Fig. %
-    \ifthenelse{\equal{#3}{}}{}{%
-      \@ifundefined{r@fig:#3}{%
-        % Reference does not exist: create a new number
-        \refstepcounter{myfigure}%
-        \revlabel{fig:#3}%
-        \themyfigure
-      }{%
-        % Reference exists: use its number
-        \ref{fig:#3}%
-      }%
-    }%
+    \ifthenelse{\equal{#3}{}}{}{\rh@inplaceref{myfigure}{fig:#3}}%
     : #4\par}
     \vspace{.5em}
   \end{minipage}
   \par\medskip
 }
-\makeatother
 
-% helper for inlined tables, TODO: update referencing as for figures above
+% helper for inlined tables: \inplacetable{width}{content}{label}{caption}
 \newcommand{\inplacetable}[4]{%
   \par\medskip
-  \noindent
+  \begingroup
   \centering
   \begin{minipage}{#1}
     \revcolor\small
     {\centering{}TABLE %
-    \ifthenelse{\equal{#3}{}}{}{\ref{tbl:#3}}: %
-    #4\par}
+    \ifthenelse{\equal{#3}{}}{}{\rh@inplaceref{mytable}{tbl:#3}}%
+    : #4\par}
     #2
   \end{minipage}
-  \par\medskip
+  \par
+  \endgroup
+  \medskip
 }
+\makeatother
 
 %% if disabled (clean)
 \else

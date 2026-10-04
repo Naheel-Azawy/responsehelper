@@ -69,6 +69,15 @@ But more changes can be found here too.
   \includegraphics[width=.5\linewidth]{example-image-a}
   \caption{A figure that already exists in the paper.}\label{fig:existing}
 \end{figure}
+\begin{table}[ht]
+  \centering
+  \caption{A table that already exists in the paper.}\label{tbl:existing}
+  \begin{tabular}{ll}
+    Item & Value \\
+    A    & 1 \\
+    B    & 2
+  \end{tabular}
+\end{table}
 \lipsum[3]
 \lipsum[4]
 
@@ -212,6 +221,30 @@ Authors
     {example-image-a}
     {existing}
     {The same figure as in the manuscript, referenced by its label.}
+\end{revcomment}
+
+\begin{revcomment}
+  Can you show a table? \lipsum[1]
+
+  \begin{revresponse}
+    Yes, see Table~\ref{tbl:newtbl} below, which was added in the response letter only.
+    The existing table of the manuscript is referenced as Table~\ref{tbl:existing}.
+  \end{revresponse}
+
+  %% \inplacetable{width}{content}{label}{caption}
+  %% a new label gets the next number after the manuscript's last table,
+  %% an existing label reuses the manuscript's number
+  \inplacetable
+    {.4\linewidth}
+    {\centering\begin{tabular}{ll} Item & Value \\ C & 3 \\ D & 4 \end{tabular}}
+    {newtbl}
+    {A table shown only in the response letter.}
+
+  \inplacetable
+    {.4\linewidth}
+    {\centering\begin{tabular}{ll} Item & Value \\ A & 1 \\ B & 2 \end{tabular}}
+    {existing}
+    {The same table as in the manuscript, referenced by its label.}
 \end{revcomment}
 
 \end{responseletter}
