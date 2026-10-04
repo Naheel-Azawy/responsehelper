@@ -1,19 +1,54 @@
 * Response helper for LaTeX papers
-Help creating response file and mark changes on the paper when changes are required to be done.
+Help creating a response file and mark changes on the paper when changes are required to be done.
 
 ** Usage
 - Copy ~responsehelper.sty~ to your project directory
 - ~\usepackage{responsehelper}~
 - Or later ~\usepackage[clean]{responsehelper}~ to get the cleaned paper to be published
-- In the text, use ~\rev{label}{text}~ to highlight changes
-- At the end of the paper, call ~\mkresponse{cover}{response text}~
+- In the text, wrap changes with ~\begin{rev}{label} ... \end{rev}~ to highlight them
+  + Use ~\revnocopy{text}~ for inline changes that should be colored but never pasted in the response
+- At the end of the paper, wrap the whole response in ~\begin{responseletter} ... \end{responseletter}~
+  + Wrap the opening letter in ~\begin{coverletter} ... \end{coverletter}~
+  + Use ~\revresponseto{Reviewer 1}~ to start a new section (starts a new page and resets the comment counter)
+  + Use ~\begin{revcomment} ... \end{revcomment}~ for a reviewer's comment. The comment is numbered automatically
+  + Use ~\begin{revcomment}* ... \end{revcomment}~ for an unnumbered comment
+  + Inside ~revcomment~, use ~\begin{revresponse} ... \end{revresponse}~ to write your response
 - In the response text, use:
-  + ~\revcomment{n}~ to start a reviewer's comment number n
-  + ~\revresponse{n}~ to write your response
-  + ~\revloc{label}~ to locate the changes in the text
+  + ~\revloc{label}~ to locate the changes in the text (page, column, and line)
   + ~\revpaste{label}~ to paste the revised text from the main manuscript
+  + ~\revdots{}~ to put an ellipsis between pasted texts
   + ~\minicite{mybib1,mybib2}~ to have a mini references list
+  + ~\semicite{mybib1}~ to cite and print a single reference inline
+  + ~\inplacefigure{width}{file}{label}{caption}~ to show a figure in the response letter. A label that does not exist in the manuscript gets a new number, and an existing label reuses the manuscript's number
+  + ~\revcolor~ and ~\revresponsecolor~ to switch to the colors of the revised text and the responses, e.g., ~{\revresponsecolor{}green color}~
 - Check the [[./example/]] directory for an example usage and [[./example/out/]] to see the compiled PDFs.
+
+** Customization
+- The colors are defined by ~\therevcolor~ (default: ~blue~) and ~\therevresponsecolor~ (default: ~teal~). Redefine them with ~\renewcommand~ after loading the package.
+
+** Dependencies
+In addition to the previous ones (~xcolor~, ~enumitem~, ~calc~, ~forarray~, ~bibentry~), the package now requires ~environ~, ~placeins~, ~lineno~, and ~tcolorbox~ (with the ~most~ library). ~clipboard~ is no longer required.
+
+** Migrating from the old version
+| Old                            | New                                                                                              |
+|--------------------------------+--------------------------------------------------------------------------------------------------|
+| ~\rev{label}{text}~            | ~\begin{rev}{label} text \end{rev}~                                                              |
+| ~\mkresponse{cover}{response}~ | ~\begin{responseletter}\begin{coverletter} cover \end{coverletter} response \end{responseletter}~ |
+| ~\revcomment{n}{text}~         | ~\begin{revcomment} text \end{revcomment}~ (auto numbered)                                       |
+| ~\revcommentn{text}~           | ~\begin{revcomment}* text \end{revcomment}~                                                      |
+| ~\revresponse{n}{text}~        | ~\begin{revresponse} text \end{revresponse}~ inside ~revcomment~                                 |
+| ~\revresponsen{text}~          | ~\begin{revresponse} text \end{revresponse}~ inside ~revcomment*~                                |
+| ~\TODO{text}~                  | removed                                                                                          |
+
+Notes:
+- ~rev~ is now an environment, so it can contain paragraphs, lists, and other block content.
+- ~\revresponseto{...}~ now starts a new page by itself, so ~\newpage~ before it is not needed.
+- In the response letter, ~\label~ is disabled and figure and table numbers are hidden.
+
+** Known limitations
+- ~\llabel~ may add an empty line (see the ~FIXME~ in ~responsehelper.sty~).
+- ~\inplacetable~ does not yet have the label handling that ~\inplacefigure~ has.
+- ~responseletter~ defines ~coverletter~ when it begins, so use only one ~responseletter~ per document.
 
 ** License
 LPPL

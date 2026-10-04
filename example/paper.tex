@@ -52,13 +52,23 @@
 
 \section{Introduction}
 The is some random text~\cite{samplebib}.
-\rev{stuff}{Where this part was added in the revised version of the paper~\cite{mybib1,mybib2}}.
+\begin{rev}{stuff}
+Where this part was added in the revised version of the paper~\cite{mybib1,mybib2}.
+\end{rev}
 
-The rest of the text is not changed here \lipsum[1]
+The rest of the text is not changed here, except for \revnocopy{this inline phrase}, which is colored but cannot be pasted. \lipsum[1]
 
-But more \rev{morestuff}{changes can be found here too \lipsum[1]}
+But more changes can be found here too.
+\begin{rev}{morestuff}
+\lipsum[1]
+\end{rev}
 
 \section{Other section}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=.5\linewidth]{example-image-a}
+  \caption{A figure that already exists in the paper.}\label{fig:existing}
+\end{figure}
 \lipsum[3]
 \lipsum[4]
 
@@ -67,8 +77,10 @@ But more \rev{morestuff}{changes can be found here too \lipsum[1]}
 
 \section{Conclusion}
 Enough talking.
-\rev{nice}{Overall, this research is the best.
-\lipsum[6]}
+\begin{rev}{nice}
+Overall, this research is the best.
+\lipsum[6]
+\end{rev}
 
 \bibliographystyle{IEEEtran}
 \bibliography{./refs.bib}
@@ -77,7 +89,9 @@ Enough talking.
 %% RESPONSE
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\mkresponse{
+\begin{responseletter}
+
+\begin{coverletter}
 
 \today \\~\\
 Professor Important Master \\~\\
@@ -95,92 +109,111 @@ The paper is now updated to be even more wonderful.
 
 \vspace{1cm}
 
-The responses to each of the queries are provided below in green color, and the manuscript's revised parts are provided in blue color.
+The responses to each of the queries are provided below in {\revresponsecolor{}green color}, and the manuscript's revised parts are provided in {\revcolor{}blue color}.
 
 \vspace{1cm}
 
 With regards, \\
 Authors
 
-}{
+\end{coverletter}
 
-\revresponseto{Associate Editor}
+\revresponseto{the Associate Editor}
 
-\revcommentn{
+%% \begin{revcomment}* is an unnumbered comment
+\begin{revcomment}*
   Make the paper nicer. \lipsum[1]
-}
 
-\revresponsen{
-  Ok, now it is nicer.
-  \lipsum[1]
-  To clarify this important point, changes can be found in \revloc{nice}.
-}
+  \begin{revresponse}
+    Ok, now it is nicer.
+    \lipsum[1]
+    To clarify this important point, changes can be found in \revloc{nice}.
+  \end{revresponse}
+\end{revcomment}
 
 \revpaste{nice}
 
-\newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \revresponseto{Reviewer 1}
 
-\revcomment{1}{
+%% \begin{revcomment} is numbered automatically (the counter resets at every \revresponseto)
+\begin{revcomment}
   Why? \lipsum[1]
-}
 
-\revresponse{1}{
-  Because of reasons. \lipsum[1] To demonstrate that, changes can be found in the manuscript in \revloc{stuff}.
-}
+  \begin{revresponse}
+    Because of reasons. \lipsum[1] To demonstrate that, changes can be found in the manuscript in \revloc{stuff}.
+  \end{revresponse}
+\end{revcomment}
 
 \revpaste{stuff}
 \bigbreak{}
 \minicite{mybib1,mybib2}
 \bigbreak{}
 
-%%%%%%%%%%%%%%
-
-\revcomment{2}{
+\begin{revcomment}
   What is going on? \lipsum[1]
-}
 
-\revresponse{2}{
-  To further clarify, we did this and that.
-  \lipsum[1]
-  The updated version delves into more details in \revloc{morestuff}.
-}
+  \begin{revresponse}
+    To further clarify, we did this and that.
+    \lipsum[1]
+    The updated version delves into more details in \revloc{morestuff}.
+  \end{revresponse}
+\end{revcomment}
 
 \revpaste{morestuff}
 
-\newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \revresponseto{Reviewer 2}
 
-\revcommentn{
+\begin{revcomment}*
   Very good paper you deserve a Nobel. \lipsum[1]
-}
 
-\revresponsen{
-  Thanks mate. \lipsum[1]
-}
+  \begin{revresponse}
+    Thanks mate. \lipsum[1]
+  \end{revresponse}
+\end{revcomment}
 
-%%%%%%%%%%%%%%
-
-\revcomment{1}{
+\begin{revcomment}
   What is the purpose of life? \lipsum[1]
-}
 
-\revresponse{1}{
-  The purpose of life can be explained by understanding the novel approach in this paper.
-  \lipsum[1]
-  Additional clarification is added to this paper in \revloc{stuff} and \revloc{morestuff}.
-}
+  \begin{revresponse}
+    The purpose of life can be explained by understanding the novel approach in this paper.
+    \lipsum[1]
+    Additional clarification is added to this paper in \revloc{stuff} and \revloc{morestuff}.
 
-\revpaste{stuff}
-\\\revdots{}
-\revpaste{morestuff}
-\bigbreak{}
-\minicite{mybib1,mybib2}
+    \revpaste{stuff}
+    \revdots{}
+    \revpaste{morestuff}
+    \bigbreak{}
+    \minicite{mybib1,mybib2}
+  \end{revresponse}
+\end{revcomment}
 
-} %% \mkresponse
+\begin{revcomment}
+  Can you show a figure? \lipsum[1]
+
+  \begin{revresponse}
+    Yes, see the figure below, which was added in the response letter only.
+    The existing figure of the manuscript is also referenced here as Fig.~\ref{fig:existing}.
+  \end{revresponse}
+
+  %% \inplacefigure{width}{file}{label}{caption}
+  %% a new label gets a new number, an existing label reuses the manuscript's number
+  \inplacefigure
+    {.4\linewidth}
+    {example-image-b}
+    {newfig}
+    {A figure shown only in the response letter.}
+
+  \inplacefigure
+    {.4\linewidth}
+    {example-image-a}
+    {existing}
+    {The same figure as in the manuscript, referenced by its label.}
+\end{revcomment}
+
+\end{responseletter}
 
 \end{document}
