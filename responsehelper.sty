@@ -110,13 +110,12 @@
       \NewDocumentEnvironment{revresponse}{}%
       {%
         \par\vspace{1em}%
-        \begin{revresponsebox}
+        \revresponsecolor % plain colored text, a nested tcolorbox cannot break across pages
         \noindent{\textbf{RESPONSE:}}%
         \par\smallskip
       }
       {%
         \par
-        \end{revresponsebox}
         \vspace{1em}
       }
 
@@ -131,13 +130,12 @@
       \NewDocumentEnvironment{revresponse}{}%
       {%
         \par\vspace{1em}%
-        \begin{revresponsebox}
+        \revresponsecolor % plain colored text, a nested tcolorbox cannot break across pages
         \noindent{\textbf{RESPONSE \rev@num:}}%
         \par\smallskip
       }
       {%
         \par
-        \end{revresponsebox}
         \vspace{1em}
       }
 
