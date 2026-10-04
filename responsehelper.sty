@@ -76,7 +76,8 @@
     colback=white,
     colframe=black,
     before upper={},
-    segmentation style={dashed, gray}
+    collower=\therevresponsecolor, % the response is the lower part, so tcolorbox restores its color after a page break
+    segmentation style={draw=none, line width=0pt} % invisible divider
   }
 }
 
@@ -100,49 +101,39 @@
   sharp corners
 }
 
+% The response is typeset as the lower part of the comment box (\tcblower).
+% tcolorbox re-applies the lower color at the top of every page the box is
+% split over. A plain \color switched on inside the box is lost at a page break.
+% \tcblower cannot be called inside the group opened by \begin, so the group is
+% closed first and a matching one is reopened for \end{revresponse}.
+\makeatletter
+\def\revresponse{%
+  \endgroup % close the group opened by \begin{revresponse}
+  \tcblower
+  \begingroup % balanced by the \endgroup of \end{revresponse}
+  \def\@currenvir{revresponse}%
+  \noindent\textbf{RESPONSE\ifx\rev@num\@empty\else\space\rev@num\fi:}%
+  \par\smallskip
+}
+\def\endrevresponse{%
+  \par
+  \vspace{1em}%
+}
+
 \NewDocumentEnvironment{revcomment}{s}
 {%
   \IfBooleanTF{#1}
     {% unnumbered comment
-
       \def\rev@num{}%
-
-      \NewDocumentEnvironment{revresponse}{}%
-      {%
-        \par\vspace{1em}%
-        \revresponsecolor % plain colored text, a nested tcolorbox cannot break across pages
-        \noindent{\textbf{RESPONSE:}}%
-        \par\smallskip
-      }
-      {%
-        \par
-        \vspace{1em}
-      }
-
       \begin{tcolorbox}[contbox]
       \noindent\textbf{COMMENT:}\par
     }
     {% numbered comment
-
       \stepcounter{revcomment}%
       \edef\rev@num{\arabic{revcomment}}%
-
-      \NewDocumentEnvironment{revresponse}{}%
-      {%
-        \par\vspace{1em}%
-        \revresponsecolor % plain colored text, a nested tcolorbox cannot break across pages
-        \noindent{\textbf{RESPONSE \rev@num:}}%
-        \par\smallskip
-      }
-      {%
-        \par
-        \vspace{1em}
-      }
-
       \ifnum\value{revcomment}>1
         \vspace{3em}%
       \fi
-
       \begin{tcolorbox}[contbox]
       \noindent\textbf{COMMENT \rev@num:}\par
     }%
@@ -150,6 +141,7 @@
 {%
   \end{tcolorbox}
 }
+\makeatother
 
 %% utils
 \newcommand{\revdots}{{\revcolor\noindent\ldots{}}\\}
