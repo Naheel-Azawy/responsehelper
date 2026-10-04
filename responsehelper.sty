@@ -30,6 +30,8 @@
 \RequirePackage{calc}
 \RequirePackage{forarray}
 \RequirePackage{placeins}
+\RequirePackage{zref-user}
+\RequirePackage{zref-abspage} % absolute page number, used to find where the response starts
 \RequirePackage[switch]{lineno}
 \RequirePackage[most]{tcolorbox}
 
@@ -213,6 +215,7 @@
 \newenvironment{responseletter}[1][]{
 \clearpage
 \onecolumn
+\zlabel{responsehelper:start} % physical page where the response starts, see example/Makefile
 \nolinenumbers%
 \fontsize{12}{13.5}\selectfont
 
